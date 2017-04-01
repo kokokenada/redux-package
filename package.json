@@ -1,0 +1,23 @@
+{
+  "name": "redux-package",
+  "version": "0.0.1",
+  "description": "organize redux code into distinct units for better organize and re-use, reduce boiler plate",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kokokenada/redux-package.git"
+  },
+  "keywords": [
+    "redux",
+    "package"
+  ],
+  "author": "Ken Ono",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kokokenada/redux-package/issues"
+  },
+  "homepage": "https://github.com/kokokenada/redux-package#readme"
+}
