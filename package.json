@@ -2,9 +2,17 @@
   "name": "redux-package",
   "version": "0.0.1",
   "description": "organize redux code into distinct units for better organize and re-use, reduce boiler plate",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint src test",
+    "test": "yarn run lint && jest --watch && yarn run lint",
+    "check": "yarn run lint && jest --coverage",
+    "clean": "rm -rf lib dist extensions targets coverage utils _book",
+    "prebuild": "yarn run clean",
+    "build:umd": "webpack --config webpack.config.js",
+    "build:umd:prod": "NODE_ENV=PRODUCTION webpack --config webpack.config.js",
+    "build": "yarn run build:umd:prod && yarn run build:umd",
+    "prepublish": "yarn run build"
   },
   "repository": {
     "type": "git",
@@ -14,10 +22,43 @@
     "redux",
     "package"
   ],
+  "typings": "./index.d.ts",
   "author": "Ken Ono",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kokokenada/redux-package/issues"
   },
-  "homepage": "https://github.com/kokokenada/redux-package#readme"
+  "homepage": "https://github.com/kokokenada/redux-package#readme",
+  "dependencies": {
+    "@angular-redux/store": "6.0.1",
+    "@angular/core": "2.4.10",
+    "eslint-plugin-import": "^2.2.0",
+    "redux": "^3.6.0",
+    "redux-observable": "0.14.1",
+    "reflect-metadata": "0.1.10",
+    "rxjs": "5.2.0",
+    "typescript": "^2.2.2",
+    "zone.js": "0.8.4"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.1.2",
+    "babel-cli": "^6.18.0",
+    "babel-loader": "^6.2.9",
+    "babel-preset-latest": "^6.16.0",
+    "consolemock": "^0.2.0",
+    "eslint": "^3.8.1",
+    "eslint-config-airbnb": "14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "fake-indexeddb": "^1.0.11",
+    "fuzzy-equal": "^1.0.1",
+    "gitbook-cli": "^2.3.0",
+    "jest": "^19.0.2",
+    "moment": "^2.17.1",
+    "redux": "^3.6.0",
+    "source-map-loader": "^0.2.1",
+    "ts-loader": "^2.0.3",
+    "typescript": "^2.2.2",
+    "typescript-definition-tester": "0.0.4",
+    "webpack": "2.3.2"
+  }
 }
