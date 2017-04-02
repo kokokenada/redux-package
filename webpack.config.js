@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 const { CheckerPlugin } = require('awesome-typescript-loader')
 const isProdBuild = process.env.NODE_ENV === 'PRODUCTION';
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 module.exports = {
 
   entry: [
@@ -25,10 +27,12 @@ module.exports = {
   // Add the loader for .ts files.
   module: {
     loaders: [
+
       {
         test: /\.tsx?$/,
         loader: 'awesome-typescript-loader',
-        exclude: /node_modules/
+        exclude: [/node_modules/, 'src/action.interface.ts'],
+//        include: ['src/*.ts']
       }
     ]
   },
@@ -44,7 +48,13 @@ module.exports = {
       },
     }),
     new CheckerPlugin()
+
   ]: [
-    new CheckerPlugin()
+    new CheckerPlugin(),
+    new CopyWebpackPlugin([ // An attempt at working around problem
+      {from: 'src/action.interface.ts'},
+      {from: 'src/state.interface.ts'}
+    ])
+
   ]
 };

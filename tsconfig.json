@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
+    "declaration": true,
+    "outDir": "dist/",
     "module": "commonjs",
     "target": "es5",
     "lib": [
@@ -15,9 +17,7 @@
     "sourceMap": true
   },
   "filesGlob": [
-    "client/**/*.ts",
-    "server/**/*.ts",
-    "typings/**/*.d.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules"
