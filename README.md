@@ -5,6 +5,8 @@ Organize redux code into distinct units for better organize and re-use, reduce b
 - Can library be enhanced so packages be written to work with NgRx and Redux?
 - Build collection of re-usable and instalable redux packages
 
+# Build
+- npm run build
 
 ## Alternatives
 - https://github.com/procore/redux-modules
