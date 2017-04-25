@@ -22,7 +22,7 @@ module.exports = {
   },
 
   // Source maps support ('inline-source-map' also works)
-  devtool: 'source-map',
+ // devtool: 'source-map',
 
   // Add the loader for .ts files.
   module: {
@@ -47,14 +47,29 @@ module.exports = {
         warnings: false,
       },
     }),
-    new CheckerPlugin()
+    new CheckerPlugin(),
+    new webpack.ContextReplacementPlugin(  // https://github.com/angular/angular/issues/11580
+      /angular(\\|\/)core(\\|\/)@angular/,
+      path.resolve('./src'),
+      {}
+    )
 
   ]: [
     new CheckerPlugin(),
-    new CopyWebpackPlugin([ // An attempt at working around problem
-      {from: 'src/action.interface.ts'},
-      {from: 'src/state.interface.ts'}
-    ])
+    new webpack.ContextReplacementPlugin(
+      /angular(\\|\/)core(\\|\/)@angular/,
+      path.resolve('./src'),
+      {}
+    )
 
   ]
 };
+
+
+/*
+ new CopyWebpackPlugin([ // An attempt at working around problem
+ {from: 'src/action.interface.ts'},
+ {from: 'src/state.interface.ts'}
+ ])
+
+ */
