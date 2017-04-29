@@ -14,7 +14,7 @@ export class ReduxPackeCombiner {
   private middlewares: any[] = []; // TODO: How to I properly type this?
   private enhancers: any[] = [];
   public static ngRedux: NgRedux<IAppState>;
-
+  private configured = false;
 
   /**
    * Logs all actions and states after they are dispatched.
@@ -34,6 +34,14 @@ export class ReduxPackeCombiner {
 
   configure(modules: ReduxPackage<IAppState, IPayloadAction>[],
             ngRedux: NgRedux<IAppState>) {
+    if (this.configured) {
+      console.warn("ReduxModuleCombiner.configure() called twice. Not performing re-initialization, but something is amiss.");
+      console.trace('ReduxModuleCombiner.configure() called twice');
+      return;
+    }
+    this.configured = true;
+
+
     ReduxPackeCombiner.ngRedux = ngRedux;
     modules.forEach((module: ReduxPackage<IAppState, IPayloadAction>)=> {
 
