@@ -3,7 +3,7 @@ Organize redux code into distinct units for better organize and re-use, reduce b
 
 # Roadmap
 - Can library be enhanced so packages be written to work with NgRx and Redux?
-- Build collection of re-usable and instalable redux packages
+- Build collection of re-usable and installable redux packages
 
 # Build
 - npm run build
