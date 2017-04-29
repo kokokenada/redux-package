@@ -1,3 +1,4 @@
+/* copied into index.ts to work around build problem
 
 import { Action } from 'redux';
 
@@ -12,3 +13,9 @@ export interface IPayloadAction extends Action {
   payload?: any;
   error?:IActionError;
 }
+
+
+ export interface IAppState {
+ }
+
+*/

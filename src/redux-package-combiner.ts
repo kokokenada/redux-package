@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import {combineReducers, ReducersMapObject} from 'redux';
 import {NgRedux} from "@angular-redux/store";
 
-import {IAppState} from "./state.interface";
+import {IAppState} from "./index";
 import {ReduxPackage} from "./redux-package.class";
 import {createEpicMiddleware} from 'redux-observable';
-import {IPayloadAction} from "./action.interface";
+import {IPayloadAction} from "./index";
 
 @Injectable()
 export class ReduxPackeCombiner {
