@@ -2,7 +2,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "declaration": true,
-    "outDir": "dist/",
+    "outDir": "./dist/",
     "module": "commonjs",
     "target": "es5",
     "lib": [

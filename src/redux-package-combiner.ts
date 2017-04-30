@@ -1,47 +1,63 @@
-import { Injectable } from '@angular/core';
+/*import 'rxjs/add/operator/do';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/delay';
+
+*/
 
 import {combineReducers, ReducersMapObject} from 'redux';
-import {NgRedux} from "@angular-redux/store";
-
 import {IAppState} from "./index";
 import {ReduxPackage} from "./redux-package.class";
 import {createEpicMiddleware} from 'redux-observable';
 import {IPayloadAction} from "./index";
 
-@Injectable()
-export class ReduxPackageCombiner {
-  private reducers: ReducersMapObject = {};
-  private middlewares: any[] = []; // TODO: How to I properly type this?
-  private enhancers: any[] = [];
-  public static ngRedux: NgRedux<IAppState>;
-  public static dispatch: <A extends IPayloadAction>(action: A) => any;
+export interface ICombinerOptions {
+  consoleLogging?: boolean
+}
 
-  private configured = false;
+export class ReduxPackageCombiner {
+  private static ngRedux;
+  public static dispatch(action: IPayloadAction) {
+    ReduxPackageCombiner.ngRedux.dispatch(action);
+  }
+
+  private static configured = false;
 
   /**
    * Logs all actions and states after they are dispatched.
    */
-  private logger = store => next => action => {
+  private static logger = store => next => action => {
     console.group(action.type);
-    console.info('Logger: dispatching:', action)
+    console.info('Logger: dispatching:', action);
     let result = next(action);
-    console.log('Logger: next state', store.getState())
+    console.log('Logger: next state', store.getState());
     console.groupEnd();
     return result;
   };
 
-  turnOnConsoleLogging() {
-    this.middlewares.push(this.logger);
-  }
-
-  configure(modules: ReduxPackage<IAppState, IPayloadAction>[],
-            ngRedux: NgRedux<IAppState>) {
-    if (this.configured) {
+  static configure(modules: ReduxPackage<IAppState, IPayloadAction>[],
+            ngRedux,
+            options: ICombinerOptions = {
+              consoleLogging: false
+            }
+  ) {
+    if (ReduxPackageCombiner.configured) {
       console.warn("ReduxModuleCombiner.configure() called twice. Not performing re-initialization, but something is amiss.");
       console.trace('ReduxModuleCombiner.configure() called twice');
       return;
     }
-    this.configured = true;
+    ReduxPackageCombiner.configured = true;
+
+    let reducers: ReducersMapObject = {};
+    let enhancers: any[] = [];
+    let middlewares: any[] = []; // TODO: How to I properly type this?
+
+    if ( options.consoleLogging ) {
+      middlewares.push(ReduxPackageCombiner.logger);
+    }
 
 
     ReduxPackageCombiner.ngRedux = ngRedux;
@@ -49,24 +65,24 @@ export class ReduxPackageCombiner {
 
       module.reducers.forEach( (reducer:any)=>{
         let reducerInModule: ReducersMapObject = {};
-        if (this.reducers[reducer.name]) {
+        if (reducers[reducer.name]) {
           throw "Two included reducers have the identical name of " + reducer.name;
         }
         reducerInModule[reducer.name] = reducer.reducer;
-        this.reducers = Object.assign(this.reducers, reducerInModule);
+        reducers = Object.assign(reducers, reducerInModule);
       } );
       module.epics.forEach((epic)=> {
-        this.middlewares.push(createEpicMiddleware(epic))
+        middlewares.push(createEpicMiddleware(epic))
       });
       module.middlewares.forEach((middleware)=> {
-        this.middlewares.push(middleware)
+        middlewares.push(middleware)
       });
       module.enhancers.forEach((enhancer)=> {
-        this.enhancers.push(enhancer)
+        enhancers.push(enhancer)
       });
     });
-    const rootReducer = combineReducers<IAppState>(this.reducers);
-    ngRedux.configureStore(rootReducer, {}, this.middlewares, this.enhancers);
+    const rootReducer = combineReducers<IAppState>(reducers);
+    ngRedux.configureStore(rootReducer, {}, middlewares, enhancers);
     modules.forEach((module: ReduxPackage<IAppState, IPayloadAction>)=> {
       module.initialize();
     })

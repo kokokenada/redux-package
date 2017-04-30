@@ -3,6 +3,7 @@ const path = require('path');
 const { CheckerPlugin } = require('awesome-typescript-loader')
 const isProdBuild = process.env.NODE_ENV === 'PRODUCTION';
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpackRxjsExternals = require( 'webpack-rxjs-externals');
 
 module.exports = {
 
@@ -20,6 +21,11 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx']
   },
+  externals: [
+    webpackRxjsExternals(),
+    'redux-observable',
+    'redux'
+  ],
 
   // Source maps support ('inline-source-map' also works)
  // devtool: 'source-map',
@@ -31,7 +37,7 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: 'awesome-typescript-loader',
-        exclude: [/node_modules/, 'src/action.interface.ts'],
+        exclude: [/node_modules/],
 //        include: ['src/*.ts']
       }
     ]
@@ -47,20 +53,10 @@ module.exports = {
         warnings: false,
       },
     }),
-    new CheckerPlugin(),
-    new webpack.ContextReplacementPlugin(  // https://github.com/angular/angular/issues/11580
-      /angular(\\|\/)core(\\|\/)@angular/,
-      path.resolve('./src'),
-      {}
-    )
+//    new CheckerPlugin(),
 
   ]: [
-    new CheckerPlugin(),
-    new webpack.ContextReplacementPlugin(
-      /angular(\\|\/)core(\\|\/)@angular/,
-      path.resolve('./src'),
-      {}
-    )
+//    new CheckerPlugin()
 
   ]
 };
