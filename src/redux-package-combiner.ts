@@ -14,6 +14,8 @@ export class ReduxPackeCombiner {
   private middlewares: any[] = []; // TODO: How to I properly type this?
   private enhancers: any[] = [];
   public static ngRedux: NgRedux<IAppState>;
+  public static dispatch: <A extends IPayloadAction>(action: A) => any;
+
   private configured = false;
 
   /**
