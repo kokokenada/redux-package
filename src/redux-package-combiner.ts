@@ -1,4 +1,8 @@
-/*import 'rxjs/add/operator/do';
+/*
+
+// Need to import RxJS operators needed when working locally with npm link etc
+
+import 'rxjs/add/operator/do';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
