@@ -1,6 +1,6 @@
 {
   "name": "redux-package",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "organize redux code into distinct units for better organize and re-use, reduce boiler plate",
   "main": "dist/index.js",
   "scripts": {
@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/kokokenada/redux-package#readme",
   "dependencies": {
-    "@angular-redux/store": "6.1.0",
+    "@angular-redux/store": "6.2.0",
     "@angular/core": "4.0.3",
     "eslint-plugin-import": "^2.2.0",
     "redux": "^3.6.0",
