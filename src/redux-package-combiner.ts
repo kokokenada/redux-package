@@ -9,7 +9,7 @@ import {createEpicMiddleware} from 'redux-observable';
 import {IPayloadAction} from "./index";
 
 @Injectable()
-export class ReduxPackeCombiner {
+export class ReduxPackageCombiner {
   private reducers: ReducersMapObject = {};
   private middlewares: any[] = []; // TODO: How to I properly type this?
   private enhancers: any[] = [];
@@ -44,7 +44,7 @@ export class ReduxPackeCombiner {
     this.configured = true;
 
 
-    ReduxPackeCombiner.ngRedux = ngRedux;
+    ReduxPackageCombiner.ngRedux = ngRedux;
     modules.forEach((module: ReduxPackage<IAppState, IPayloadAction>)=> {
 
       module.reducers.forEach( (reducer:any)=>{
