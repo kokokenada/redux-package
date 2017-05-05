@@ -17,6 +17,7 @@ import {IAppState} from "./index";
 import {ReduxPackage} from "./redux-package.class";
 import {createEpicMiddleware} from 'redux-observable';
 import {IPayloadAction} from "./index";
+import {Dispatcher} from './dispatcher';
 
 export interface ICombinerOptions {
   consoleLogging?: boolean
@@ -63,7 +64,9 @@ export class ReduxPackageCombiner {
       middlewares.push(ReduxPackageCombiner.logger);
     }
 
-
+    if (!ngRedux) { // No ngRedux passed, use our internal dispatcher
+      ngRedux = new Dispatcher<IAppState>();
+    }
     ReduxPackageCombiner.ngRedux = ngRedux;
     modules.forEach((module: ReduxPackage<IAppState, IPayloadAction>)=> {
 
