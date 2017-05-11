@@ -18,15 +18,33 @@ import {ReduxPackage} from "./redux-package.class";
 import {createEpicMiddleware} from 'redux-observable';
 import {IPayloadAction} from "./index";
 import {Dispatcher} from './dispatcher';
+import {IDispatcher} from './index';
 
 export interface ICombinerOptions {
   consoleLogging?: boolean
 }
 
 export class ReduxPackageCombiner {
-  private static ngRedux;
+  private static _ngRedux: IDispatcher<IAppState>;
+  private static _store;
+
   public static dispatch(action: IPayloadAction) {
-    ReduxPackageCombiner.ngRedux.dispatch(action);
+    ReduxPackageCombiner._ngRedux.dispatch(action);
+  }
+
+  public static getDispatcher(): IDispatcher<IAppState> {
+    return ReduxPackageCombiner._ngRedux;
+  }
+
+  /**
+   * Resets so it can be reconfigured (only required for tests)
+   */
+  public static reset() {
+    ReduxPackageCombiner.configured = false;
+  }
+
+  public static getStore() { // Type???
+    return ReduxPackageCombiner._store;
   }
 
   private static configured = false;
@@ -35,16 +53,25 @@ export class ReduxPackageCombiner {
    * Logs all actions and states after they are dispatched.
    */
   private static logger = store => next => action => {
-    console.group(action.type);
+    if (typeof console.group === 'function')
+      console.group(action.type);
     console.info('Logger: dispatching:', action);
     let result = next(action);
     console.log('Logger: next state', store.getState());
-    console.groupEnd();
+    if (typeof console.groupEnd === 'function')
+      console.groupEnd();
     return result;
   };
 
+  /**
+   * Configures passed modules and readies them for execution
+   *
+   * @param modules
+   * @param ngRedux - pass ngRedux if using it, null if using React
+   * @param options
+   */
   static configure(modules: ReduxPackage<IAppState, IPayloadAction>[],
-            ngRedux,
+            ngRedux: IDispatcher<IAppState>,
             options: ICombinerOptions = {
               consoleLogging: false
             }
@@ -67,7 +94,7 @@ export class ReduxPackageCombiner {
     if (!ngRedux) { // No ngRedux passed, use our internal dispatcher
       ngRedux = new Dispatcher<IAppState>();
     }
-    ReduxPackageCombiner.ngRedux = ngRedux;
+    ReduxPackageCombiner._ngRedux = ngRedux;
     modules.forEach((module: ReduxPackage<IAppState, IPayloadAction>)=> {
 
       module.reducers.forEach( (reducer:any)=>{
@@ -92,6 +119,10 @@ export class ReduxPackageCombiner {
     ngRedux.configureStore(rootReducer, {}, middlewares, enhancers);
     modules.forEach((module: ReduxPackage<IAppState, IPayloadAction>)=> {
       module.initialize();
-    })
+    });
+
+    if (ngRedux.getStore) {
+      ReduxPackageCombiner._store = ngRedux.getStore();
+    }
   }
 }

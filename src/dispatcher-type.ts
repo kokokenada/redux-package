@@ -1,9 +1,3 @@
-export * from './redux-package.class';
-export * from './redux-package-combiner';
-
-
-//export * from './action.interface'; Copied below to work around build problem
-
 import {
   Store,
   Action,
@@ -13,26 +7,12 @@ import {
 } from 'redux';
 
 
-export interface IActionError {
-  error: string | number;
-  reason ? : string;
-  details ? : string;
-  message ? : string;
-}
-
-export interface IPayloadAction extends Action {
-  payload?: any;
-  error?:IActionError;
-}
-
-
-export interface IAppState {
-}
-
-
-// This stuff here to work around webpack not working when you import 'dispatcher-type'
+// Sourced from https://github.com/angular-redux/store
 
 import { Observable } from 'rxjs/Observable';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+
+type RetypedCompose = (func: Function, ...funcs: Function[]) => Function;
 export type PropertySelector = string | number | symbol;
 export type PathSelector = (string | number)[];
 export type FunctionSelector<RootState, S> = ((s: RootState) => S);
@@ -41,6 +21,10 @@ export type Selector<RootState, S> = PropertySelector |
   FunctionSelector<RootState, S>;
 
 export type Comparator = (x: any, y: any) => boolean;
+
+/**
+ * An alternative to ngRedux when not using Angular
+ */
 export interface IDispatcher<RootState>  {
   getStore?(): Store<RootState> ;
   configureStore(

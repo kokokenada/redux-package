@@ -1,6 +1,6 @@
 {
   "name": "redux-package",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "organize redux code into distinct units for better organize and re-use, reduce boiler plate",
   "main": "dist/redux-package.js",
   "scripts": {
