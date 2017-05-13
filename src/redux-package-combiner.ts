@@ -28,6 +28,10 @@ export class ReduxPackageCombiner {
   private static _ngRedux: IDispatcher<IAppState>;
   private static _store;
 
+  public static setMockDispatch(dispatch: (action: IPayloadAction)=>void ) {
+    ReduxPackageCombiner.dispatch = dispatch;
+  }
+
   public static dispatch(action: IPayloadAction) {
     ReduxPackageCombiner._ngRedux.dispatch(action);
   }
