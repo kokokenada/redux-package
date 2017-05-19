@@ -21,7 +21,8 @@ import {Dispatcher} from './dispatcher';
 import {IDispatcher} from './index';
 
 export interface ICombinerOptions {
-  consoleLogging?: boolean
+  consoleLogging?: boolean;
+  otherMiddlewares?: any[]; // Todo: add type
 }
 
 export class ReduxPackageCombiner {
@@ -77,7 +78,8 @@ export class ReduxPackageCombiner {
   static configure(modules: ReduxPackage<IAppState, IPayloadAction>[],
             ngRedux: IDispatcher<IAppState>,
             options: ICombinerOptions = {
-              consoleLogging: false
+              consoleLogging: false,
+              otherMiddlewares: []
             }
   ) {
     if (ReduxPackageCombiner.configured) {
@@ -119,14 +121,19 @@ export class ReduxPackageCombiner {
         enhancers.push(enhancer)
       });
     });
+    if (options.otherMiddlewares) {
+      options.otherMiddlewares.forEach( (middleware) => {
+        middlewares.push(middleware);
+      } );
+    }
     const rootReducer = combineReducers<IAppState>(reducers);
     ngRedux.configureStore(rootReducer, {}, middlewares, enhancers);
+    if (ngRedux.getStore) {
+      ReduxPackageCombiner._store = ngRedux.getStore();
+    }
     modules.forEach((module: ReduxPackage<IAppState, IPayloadAction>)=> {
       module.initialize();
     });
 
-    if (ngRedux.getStore) {
-      ReduxPackageCombiner._store = ngRedux.getStore();
-    }
   }
 }
