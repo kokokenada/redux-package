@@ -41,3 +41,5 @@ export interface IDispatcher<RootState>  {
   subscribe (listener: () => void);
   dispatch <A extends Action>(action: A): any;
 }
+
+export let webpacksticky1= '';

@@ -17,3 +17,4 @@ export interface IPayloadAction extends Action {
 export interface IAppState {
 }
 
+export let webpacksticky2 = '';

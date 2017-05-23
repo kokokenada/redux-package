@@ -19,6 +19,8 @@ import {createEpicMiddleware} from 'redux-observable';
 import {IPayloadAction} from "./index";
 import {Dispatcher} from './dispatcher';
 import {IDispatcher} from './index';
+import {Comparator, Selector} from './dispatcher-type';
+import {Observable} from 'rxjs/Observable';
 
 export interface ICombinerOptions {
   consoleLogging?: boolean;
@@ -39,6 +41,13 @@ export class ReduxPackageCombiner {
 
   public static getDispatcher(): IDispatcher<IAppState> {
     return ReduxPackageCombiner._ngRedux;
+  }
+
+  public static select<S>(
+    selector?: Selector<IAppState, S>,
+    comparator?: Comparator): Observable<S> {
+
+    return ReduxPackageCombiner._ngRedux.select(selector, comparator);
   }
 
   /**
