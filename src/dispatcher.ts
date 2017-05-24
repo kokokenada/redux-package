@@ -19,6 +19,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 
@@ -44,7 +45,14 @@ export class Dispatcher<RootState> implements IDispatcher<RootState> {
   constructor() {
     this._store$ = new BehaviorSubject<RootState>(null)
       .filter(n => n !== null)
-      .switchMap(n => Observable.from(n as any)) as BehaviorSubject<RootState>;
+      .switchMap(
+        (n) => {
+          if (n instanceof Observable) {
+            return Observable.from(n as any);
+          } else {
+            return Observable.of(n as any);
+          }
+        }) as BehaviorSubject<RootState>;
   }
 
 
